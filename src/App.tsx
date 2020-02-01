@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import 'semantic-ui-css/semantic.min.css'
+import { Menu, MenuItemProps } from 'semantic-ui-react'
+import {
+  Switch,
+  Route,
+  Link,
+  HashRouter
+} from "react-router-dom";
+import Home from './pages/home/home';
+import TabPage from './pages/tabpage/Tabpage';
 
-const App = () => {
+export default function App() {
+  
+  const [activeIndex, setActiveIndex] = useState('home');
+  const handleNavbarclick = (event: any, data: MenuItemProps) => {
+    setActiveIndex(data.name!);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <HashRouter>
+      <Menu>
+        <Menu.Item
+          as={ Link }
+          to='/'
+          name='home'
+          active={activeIndex === 'home'}
+          onClick={handleNavbarclick}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          Home
+        </Menu.Item>
+
+        <Menu.Item
+          as={Link}
+          to='/tabpage/tab1'
+          name='tabpage'
+          active={activeIndex === 'tabpage'}
+          onClick={handleNavbarclick}
+        >
+          Tabpage
+        </Menu.Item>
+
+        <Menu.Item as={Link}
+          to='/about'
+          name='about'
+          active={activeIndex === 'about'}
+          onClick={handleNavbarclick}
+        >
+          About
+        </Menu.Item>
+
+      </Menu>
+  
+        {/* A <Switch> looks through its children <Route>s and renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/tabpage/:slug/">
+            <TabPage />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+
+    </HashRouter>
   );
 }
 
-export default App;
+
+function About() {
+  return <h2>About</h2>;
+}
